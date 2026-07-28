@@ -24,19 +24,17 @@ try:
     # 仓库模式: agentmatrix-research 内运行
     from common.paths import data_path, runtime_path  # type: ignore
     _IN_REPO = True
-    DATA_DIR = os.environ.get(
-        "BACKTEST_ENGINE_DATA_DIR",
-        str(data_path("backtest_engine"))
-    )
-    RESULTS_DIR = os.environ.get(
-        "BACKTEST_ENGINE_RESULTS_DIR",
-        str(runtime_path("backtest_engine", "results"))
-    )
+    _DEFAULT_DATA_DIR = str(data_path("backtest_engine"))
+    _DEFAULT_RESULTS_DIR = str(runtime_path("backtest_engine", "results"))
 except ImportError:
     # 独立模式: submissions/backtest_engine/ 下直接运行
     _IN_REPO = False
-    DATA_DIR = os.path.join(BASE_DIR, "data")
-    RESULTS_DIR = os.path.join(BASE_DIR, "results")
+    _DEFAULT_DATA_DIR = os.path.join(BASE_DIR, "data")
+    _DEFAULT_RESULTS_DIR = os.path.join(BASE_DIR, "results")
+
+# 环境变量可覆盖所有模式的默认值
+DATA_DIR = os.environ.get("BACKTEST_ENGINE_DATA_DIR", _DEFAULT_DATA_DIR)
+RESULTS_DIR = os.environ.get("BACKTEST_ENGINE_RESULTS_DIR", _DEFAULT_RESULTS_DIR)
 
 STRATEGY_DIR = os.path.join(BASE_DIR, "strategies")
 OUTPUT_DIR = RESULTS_DIR  # generate_report 输出目录
